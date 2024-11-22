@@ -14,6 +14,9 @@ else() # Linux
 endif()
 
 if(WIN32)
+    if (MSVC)
+        add_compile_options(/utf-8)
+    endif()
 else() # Linux
 	add_definitions(-DCUSTOM_IMGUIFILEDIALOG_CONFIG="ImGuiFileDialogConfigUnix.h")
 endif()
