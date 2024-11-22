@@ -89,7 +89,7 @@ static void PlotMyShapes(const char* label_id,  const mvSpanSeriesConfig &config
 			ImVec2 p2 = ImPlot::PlotToPixels(item->end, y);
 			draw_list->AddRectFilled(p1, p2, col);
 			::sprintf(id_str, "%d", item->id);
-			draw_list->AddText(p1, col, font_size, id_str);
+			draw_list->AddText(p1, col, id_str);
 		}
 
 		// end plot item

@@ -368,14 +368,14 @@ static void PlotMyShapes(const char* label_id, mvAppItem& item, mvObstacleSeries
 				ImVec2 p3 = ImPlot::PlotToPixels(obj->lat, obj->lgt);
 				sprintf(id_str, "%d", (int)obj->id);
 				
-				draw_list->AddText(p3, colTxt, font_size, id_str);
+				draw_list->AddText(p3, colTxt, id_str);
 
 			}
 			// draw obj desc
 			for(auto &od: config._objDesc){
 				if(od.obj_id == (int)obj->id){
 					ImVec2 p4 = ImPlot::PlotToPixels(obj->lat+1.4, obj->lgt+2.1);
-					draw_list->AddText(p4, IM_COL32(255, 255, 0, 128), font_size, od.desc.c_str());
+					draw_list->AddText(p4, IM_COL32(255, 255, 0, 128), od.desc.c_str());
 					break;
 				}
 			}

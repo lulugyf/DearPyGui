@@ -358,3 +358,43 @@ namespace Str{
         return ret;
     }
 }
+
+
+
+namespace ImPlot
+{
+    IMPLOT_API void PlotText(const char* text, double x, double y, float font_size, bool vertical=false, const ImVec2& pix_offset=ImVec2(0,0));
+
+    void PlotText(const char* text, double x, double y, float font_size, bool vertical, const ImVec2& pixel_offset) {
+        IM_ASSERT_USER_ERROR(GImPlot->CurrentPlot != NULL, "PlotText() needs to be called between BeginPlot() and EndPlot()!");
+        ImDrawList & DrawList = *GetPlotDrawList();
+        PushPlotClipRect();
+        ImU32 colTxt = GetStyleColorU32(ImPlotCol_InlayText);
+        if (vertical) {
+            ImVec2 ctr = CalcTextSizeVertical(text) * 0.5f;
+            ImVec2 pos = PlotToPixels(ImPlotPoint(x,y)) + ImVec2(-ctr.x, ctr.y) + pixel_offset;
+            AddTextVertical(&DrawList, pos, colTxt, text);
+        }
+        else {
+            ImVec2 pos = PlotToPixels(ImPlotPoint(x,y)) - ImGui::CalcTextSize(text) * 0.5f + pixel_offset;
+            DrawList.AddText(pos, colTxt, text);
+        }
+        PopPlotClipRect();
+    }
+
+}
+
+namespace ext
+{
+    void AddQuadrilateral(ImDrawList *dl, const ImVec2& p1, const ImVec2& p2, const ImVec2& p3, const ImVec2& p4, ImU32 col, float thickness)
+    {
+        if ((col & IM_COL32_A_MASK) == 0)
+            return;
+
+        dl->PathLineTo(p1);
+        dl->PathLineTo(p2);
+        dl->PathLineTo(p3);
+        dl->PathLineTo(p4);
+        dl->PathStroke(col, ImDrawFlags_Closed, thickness);
+    }
+}

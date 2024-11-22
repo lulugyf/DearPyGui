@@ -70,6 +70,11 @@ struct _Obj {
 	
 };
 
+namespace ext
+{
+    void AddQuadrilateral(ImDrawList *dl, const ImVec2& p1, const ImVec2& p2, const ImVec2& p3, const ImVec2& p4, ImU32 col, float thickness);
+}
+
 static void PlotMyShapes(const char* label_id,  const mvQuardSeriesConfig &config)
 {
 	auto &val = *config.value;
@@ -92,7 +97,8 @@ static void PlotMyShapes(const char* label_id,  const mvQuardSeriesConfig &confi
 			ImVec2 p3 = ImPlot::PlotToPixels(item->x2, item->y2); // right-front
 			ImVec2 p4 = ImPlot::PlotToPixels(item->x3, item->y3); // left-front    
 
-			draw_list->AddQuadrilateral(p1, p2, p3, p4, col, 2);
+			//draw_list->AddQuadrilateral(p1, p2, p3, p4, col, 2);
+			ext::AddQuadrilateral(draw_list, p1, p2, p3, p4, col, 2);
 		
 		}
 

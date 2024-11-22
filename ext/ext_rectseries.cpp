@@ -109,7 +109,7 @@ static void PlotMyShapes(const char* label_id,  const mvRectSeriesConfig &config
 			ImVec2 p3 = ImPlot::PlotToPixels(item->x, item->y);
 			sprintf(id_str, "%d", (int)item->id);
 			ImU32 colTxt = ImPlot::GetStyleColorU32(ImPlotCol_InlayText);
-			draw_list->AddText(p3, colTxt, font_size, id_str);
+			draw_list->AddText(p3, colTxt, id_str);
 
 
 			if(ImPlot::IsPlotHovered() 

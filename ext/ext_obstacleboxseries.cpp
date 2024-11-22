@@ -61,6 +61,11 @@ struct FR_OBJECT {
 
 };
 
+namespace ext
+{
+    void AddQuadrilateral(ImDrawList *dl, const ImVec2& p1, const ImVec2& p2, const ImVec2& p3, const ImVec2& p4, ImU32 col, float thickness);
+}
+
 inline void _rotate(const float x, const float y, const float theta, float& x0, float& y0) {
 	x0 = x * cosf(theta) - y * sinf(theta);
 	y0 = y * cosf(theta) + x * sinf(theta);
@@ -199,7 +204,8 @@ static void PlotMyShapes(const char* label_id, mvAppItem& item, const mvObstacle
 				ImVec2 p3 = ImPlot::PlotToPixels(objBase->lat + len, objBase->lgt + width); // right-front
 				ImVec2 p4 = ImPlot::PlotToPixels(objBase->lat - len, objBase->lgt + width); // left-front    
 
-				draw_list->AddQuadrilateral(p1, p2, p3, p4, col, 2);
+				// draw_list->AddQuadrilateral(p1, p2, p3, p4, col, 2);
+				ext::AddQuadrilateral(draw_list, p1, p2, p3, p4, col, 2);
 			}
 		}
 

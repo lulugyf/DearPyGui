@@ -114,7 +114,7 @@ static void PlotMyShapes(const char* label_id,  const mvObjstruSeriesConfig &con
 				p3.x += 7; // 标签向右移动一点， 像素值
 				sprintf(id_str, "%d", (int)item->id);
 				ImU32 colTxt = ImPlot::GetStyleColorU32(ImPlotCol_InlayText);
-				draw_list->AddText(p3, colTxt, font_size, id_str);
+				draw_list->AddText(p3, colTxt, id_str);
 			}
 					
 			// if(config.tooltip) {

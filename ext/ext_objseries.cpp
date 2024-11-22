@@ -130,7 +130,8 @@ static void PlotMybars(const char* label_id,  const mvObjSeriesConfig &config)
 					draw_list->AddTriangle(p1, p2, p3, cl, 2.f);
 				if(config.txtShow){
 					sprintf(id_str, "%d", (int)oid[i]);
-					ImPlot::PlotText(id_str, xx[i], yy[i], config.fontSize, false, offset);
+					//draw_list->AddText(p3, colTxt, id_str);
+					ImPlot::PlotText(id_str, xx[i], yy[i], offset);
 				}
 			}
 		}else if(config.shape == 2){
@@ -143,7 +144,7 @@ static void PlotMybars(const char* label_id,  const mvObjSeriesConfig &config)
 					draw_list->AddRectFilled(p1, p2, cl, 2.f);
 				if(config.txtShow){
 					sprintf(id_str, "%d", (int)oid[i]);
-					ImPlot::PlotText(id_str, xx[i], yy[i], config.fontSize, false, offset);
+					ImPlot::PlotText(id_str, xx[i], yy[i], offset);
 				}
 			}
 		}
