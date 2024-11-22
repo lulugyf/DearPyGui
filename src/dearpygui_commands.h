@@ -1314,6 +1314,76 @@ set_axis_limits_auto(PyObject* self, PyObject* args, PyObject* kwargs)
 	return GetPyNone();
 }
 
+
+static PyObject*
+set_axis_range(PyObject* self, PyObject* args, PyObject* kwargs)
+{
+	PyObject* axisraw;
+	float ymin;
+	float ymax;
+
+	if (!Parse((GetParsers())["set_axis_range"], args, kwargs, __FUNCTION__, &axisraw, &ymin, &ymax))
+		return GetPyNone();
+
+	std::lock_guard<std::recursive_mutex> lk(GContext->mutex);
+
+	mvUUID axis = GetIDFromPyObject(axisraw);
+
+	auto aplot = GetItem(*GContext->itemRegistry, axis);
+	if (aplot == nullptr)
+	{
+		mvThrowPythonError(mvErrorCode::mvItemNotFound, "set_axis_range",
+			"Item not found: " + std::to_string(axis), nullptr);
+		return GetPyNone();
+	}
+
+	if (aplot->type != mvAppItemType::mvPlotAxis)
+	{
+		mvThrowPythonError(mvErrorCode::mvIncompatibleType, "set_axis_range",
+			"Incompatible type. Expected types include: mvPlotAxis", aplot);
+		return GetPyNone();
+	}
+
+	mvPlotAxis* graph = static_cast<mvPlotAxis*>(aplot);
+	graph->configData.setLimits = false;
+	graph->configData.setRange = true;
+	graph->configData.limits = ImVec2(ymin, ymax);
+	return GetPyNone();
+}
+
+static PyObject*
+get_axis_range(PyObject* self, PyObject* args, PyObject* kwargs)
+{
+	PyObject* plotraw;
+
+	if (!Parse((GetParsers())["get_axis_range"], args, kwargs, __FUNCTION__, &plotraw))
+		return GetPyNone();
+
+	std::lock_guard<std::recursive_mutex> lk(GContext->mutex);
+
+	mvUUID plot = GetIDFromPyObject(plotraw);
+
+	auto aplot = GetItem(*GContext->itemRegistry, plot);
+	if (aplot == nullptr)
+	{
+		mvThrowPythonError(mvErrorCode::mvItemNotFound, "get_axis_range",
+			"Item not found: " + std::to_string(plot), nullptr);
+		return GetPyNone();
+	}
+
+	if (aplot->type != mvAppItemType::mvPlotAxis)
+	{
+		mvThrowPythonError(mvErrorCode::mvIncompatibleType, "get_axis_range",
+			"Incompatible type. Expected types include: mvPlotAxis", aplot);
+		return GetPyNone();
+	}
+
+	mvPlotAxis* graph = static_cast<mvPlotAxis*>(aplot);
+
+	const ImVec2& lim = graph->configData.limits_actual;
+	return ToPyPair(lim.x, lim.y);
+}
+
 static PyObject*
 fit_axis_data(PyObject* self, PyObject* args, PyObject* kwargs)
 {
@@ -4327,3 +4397,4 @@ get_platform(PyObject* self, PyObject* args, PyObject* kwargs)
 	return ToPyInt(2L);
 #endif
 }
+

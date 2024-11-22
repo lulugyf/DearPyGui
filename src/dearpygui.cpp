@@ -33,6 +33,7 @@ GetModuleParsers()
 		InsertParser_Block2(parsers);
 		InsertParser_Block3(parsers);
 		InsertParser_Block4(parsers);
+		InsertParser_Block_custom(parsers); // azj
 	}
 	return parsers;
 }
@@ -572,6 +573,10 @@ PyInit__dearpygui(void)
 	MV_ADD_COMMAND(set_axis_limits_auto);
 	MV_ADD_COMMAND(get_axis_limits);
 	MV_ADD_COMMAND(fit_axis_data);
+
+	// azj
+	MV_ADD_COMMAND(set_axis_range);
+	MV_ADD_COMMAND(get_axis_range);
 
 	// tables
 	MV_ADD_COMMAND(highlight_table_column);

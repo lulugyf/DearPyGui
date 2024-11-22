@@ -231,6 +231,10 @@ inline bool mvClipPoint(float clipViewport[6], mvVec4& point)
     return false;
 }
 
+namespace ext {
+    extern constexpr const char* GetEntityCommand(mvAppItemType type);
+};
+
 inline constexpr const char*
 GetEntityCommand(mvAppItemType type)
 {
@@ -408,8 +412,9 @@ GetEntityCommand(mvAppItemType type)
     case mvAppItemType::mvItemHandlerRegistry:         return "add_item_handler_registry";
     default:
     {
-        IM_ASSERT(false && "No command");
-        return "no command";
+        // IM_ASSERT(false && "No command");
+        // return "no command";
+        return ext::GetEntityCommand(type);
     }
     }
 }

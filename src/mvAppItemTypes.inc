@@ -169,4 +169,17 @@
     X( mvDragDoubleMulti ) \
     X( mvSliderDouble ) \
     X( mvSliderDoubleMulti ) \
-    X( mvCustomSeries )
+    X( mvCustomSeries ) \
+    \
+    X( mvObjSeries ) \
+    X( mvDotSeries ) \
+    X( mvLaneSeries ) \
+    X( mvTimeSeries ) \
+    X( mvSpanSeries ) \
+    X( mvObjstruSeries ) \
+    X( mvRectSeries ) \
+    X( mvObstacleSeries ) \
+    X( mvObstacleBoxSeries ) \
+    X( mvObjYawSeries ) \
+    X( mvLights ) \
+    X( mvQuardSeries)

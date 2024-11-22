@@ -10427,3 +10427,205 @@ mvReservedUUID_7=internal_dpg.mvReservedUUID_7
 mvReservedUUID_8=internal_dpg.mvReservedUUID_8
 mvReservedUUID_9=internal_dpg.mvReservedUUID_9
 mvReservedUUID_10=internal_dpg.mvReservedUUID_10
+
+
+
+
+########### customize
+def add_obj_series(xx : Union[List[float], Tuple[float, ...]], yy : Union[List[float], Tuple[float, ...]], oid : Union[List[float], Tuple[float, ...]], 
+	*, 
+	label: str =None, user_data: Any =None, use_internal_label: bool =True, tag: Union[int, str] =0, parent: Union[int, str] =0, before: Union[int, str] =0, source: Union[int, str] =0, show: bool =True, 
+	weight: float =0.25, tooltip: bool =True, fill: bool =True, show_id: bool =True, id_offsetx: float =0.2, id_offsety: float =-0.2,
+	 **kwargs) -> Union[int, str]:
+
+	if 'id' in kwargs.keys():
+		warnings.warn('id keyword renamed to tag', DeprecationWarning, 2)
+		tag=kwargs['id']
+
+	return internal_dpg.add_obj_series(xx, yy, oid, 
+			label=label, user_data=user_data, use_internal_label=use_internal_label, tag=tag, parent=parent, before=before, source=source, show=show, 
+		weight=weight, tooltip=tooltip, fill=fill, show_id=show_id, id_offsetx=id_offsetx, id_offsety=id_offsety,
+		  **kwargs)
+
+
+def add_dot_series(dots : bytes, 
+	*, 
+	label: str =None, user_data: Any =None, use_internal_label: bool =True, tag: Union[int, str] =0, parent: Union[int, str] =0, before: Union[int, str] =0, source: Union[int, str] =0, show: bool =True, 
+	weight: float =0.25, tooltip: bool =True, xoff: float=0.0, yoff: float=0.0,
+	 **kwargs) -> Union[int, str]:
+
+	if 'id' in kwargs.keys():
+		warnings.warn('id keyword renamed to tag', DeprecationWarning, 2)
+		tag=kwargs['id']
+
+	return internal_dpg.add_dot_series(dots, 
+			label=label, user_data=user_data, use_internal_label=use_internal_label, tag=tag, parent=parent, before=before, source=source, show=show, 
+		weight=weight, tooltip=tooltip, xoff=xoff, yoff=yoff,
+		  **kwargs)
+
+def add_lane_series(lanes : bytes, 
+	*, 
+	label: str =None, user_data: Any =None, use_internal_label: bool =True, tag: Union[int, str] =0, parent: Union[int, str] =0, before: Union[int, str] =0, source: Union[int, str] =0, show: bool =True, 
+	weight: float =0.25, tooltip: bool =True, line_mode: int = 4,
+	 **kwargs) -> Union[int, str]:
+
+	if 'id' in kwargs.keys():
+		warnings.warn('id keyword renamed to tag', DeprecationWarning, 2)
+		tag=kwargs['id']
+
+	return internal_dpg.add_lane_series(lanes, 
+			label=label, user_data=user_data, use_internal_label=use_internal_label, tag=tag, parent=parent, before=before, source=source, show=show, 
+		weight=weight, tooltip=tooltip, line_mode=line_mode,
+		  **kwargs)
+
+def add_span_series(data : bytes, 
+	*, 
+	label: str =None, user_data: Any =None, use_internal_label: bool =True, tag: Union[int, str] =0, parent: Union[int, str] =0, before: Union[int, str] =0, source: Union[int, str] =0, show: bool =True, 
+	weight: float =0.25, tooltip: bool =True,
+	 **kwargs) -> Union[int, str]:
+
+	if 'id' in kwargs.keys():
+		warnings.warn('id keyword renamed to tag', DeprecationWarning, 2)
+		tag=kwargs['id']
+
+	return internal_dpg.add_span_series(data, 
+			label=label, user_data=user_data, use_internal_label=use_internal_label, tag=tag, parent=parent, before=before, source=source, show=show, 
+		weight=weight, tooltip=tooltip,
+		  **kwargs)
+
+def add_objstru_series(data : bytes, 
+	*, 
+	label: str =None, user_data: Any =None, use_internal_label: bool =True, tag: Union[int, str] =0, parent: Union[int, str] =0, before: Union[int, str] =0, source: Union[int, str] =0, show: bool =True, 
+	weight: float =0.25, tooltip: bool =True, shape: int = 1,
+	 **kwargs) -> Union[int, str]:
+	'''简单目标序列
+	@param shape 形状， 1-triangle 2-rectangle 3-circle
+	@param weight 形状尺寸， 对于shape=1,2为坐标系尺寸, 对于shape=3则为像素尺寸
+	@param showid 是否显示目标id
+	@param data  --- 序列的数据， 类型为bytes, 结构为连续的 (id:int, x:float, y:float) 结构体序列
+	
+	'''
+	if 'id' in kwargs.keys():
+		warnings.warn('id keyword renamed to tag', DeprecationWarning, 2)
+		tag=kwargs['id']
+
+	return internal_dpg.add_objstru_series(data, 
+			label=label, user_data=user_data, use_internal_label=use_internal_label, tag=tag, parent=parent, before=before, source=source, show=show, 
+		weight=weight, tooltip=tooltip, shape=shape, showid=True,
+		  **kwargs)
+
+def add_rect_series(data : bytes, 
+	*, 
+	label: str =None, user_data: Any =None, use_internal_label: bool =True, tag: Union[int, str] =0, parent: Union[int, str] =0, before: Union[int, str] =0, source: Union[int, str] =0, show: bool =True, 
+	weight: float =0.25, fill: bool = False, raw_w: float=0, raw_h: float=0, draw_w: float=0, draw_h: float =0,
+	 **kwargs) -> Union[int, str]:
+
+	if 'id' in kwargs.keys():
+		warnings.warn('id keyword renamed to tag', DeprecationWarning, 2)
+		tag=kwargs['id']
+
+	return internal_dpg.add_rect_series(data, 
+			label=label, user_data=user_data, use_internal_label=use_internal_label, tag=tag, parent=parent, before=before, source=source, show=show, 
+		weight=weight, fill=fill, raw_w = raw_w, raw_h = raw_h, draw_w = draw_w, draw_h = draw_h,
+		  **kwargs)
+
+def add_light_series(*args, **kwargs):
+	return internal_dpg.add_light_series(*args, **kwargs)
+
+def add_obstacle_series(*args, **kwargs):
+	return internal_dpg.add_obstacle_series(*args, **kwargs)
+
+def add_obstaclebox_series(item: Union[int, str],
+	*,
+	label: str =None, user_data: Any =None, use_internal_label: bool =True, tag: Union[int, str] =0, parent: Union[int, str] =0, before: Union[int, str] =0, source: Union[int, str] =0, show: bool =True, 
+	fmt: bytes = None,
+	 **kwargs) -> Union[int, str]:
+    
+    if 'id' in kwargs.keys():
+        warnings.warn('id keyword renamed to tag', DeprecationWarning, 2)
+        tag=kwargs['id']
+
+    return internal_dpg.add_obstaclebox_series(item,
+            label=label, user_data=user_data, use_internal_label=use_internal_label, tag=tag, parent=parent, before=before, source=source, show=show,
+            fmt=fmt,
+            **kwargs)
+
+def add_objyaw_series(item: Union[int, str],
+	*,
+	label: str =None, user_data: Any =None, use_internal_label: bool =True, tag: Union[int, str] =0, parent: Union[int, str] =0, before: Union[int, str] =0, source: Union[int, str] =0, show: bool =True, 
+	fmt: bytes = None,
+	 **kwargs) -> Union[int, str]:
+    
+    if 'id' in kwargs.keys():
+        warnings.warn('id keyword renamed to tag', DeprecationWarning, 2)
+        tag=kwargs['id']
+
+    return internal_dpg.add_objyaw_series(item,
+            label=label, user_data=user_data, use_internal_label=use_internal_label, tag=tag, parent=parent, before=before, source=source, show=show,
+            fmt=fmt,
+            **kwargs)
+
+def add_quard_series(data : bytes, 
+	*, 
+	label: str =None, user_data: Any =None, use_internal_label: bool =True, tag: Union[int, str] =0, parent: Union[int, str] =0, before: Union[int, str] =0, source: Union[int, str] =0, show: bool =True, 
+	weight: float =0.25, fill: bool = False, 
+	 **kwargs) -> Union[int, str]:
+
+	if 'id' in kwargs.keys():
+		warnings.warn('id keyword renamed to tag', DeprecationWarning, 2)
+		tag=kwargs['id']
+
+	return internal_dpg.add_quard_series(data, 
+			label=label, user_data=user_data, use_internal_label=use_internal_label, tag=tag, parent=parent, before=before, source=source, show=show, 
+		weight=weight, fill=fill, 
+		  **kwargs)
+
+def add_time_series(dates : Union[List[float], Tuple[float, ...]], lows : Union[List[float], Tuple[float, ...]], highs : Union[List[float], Tuple[float, ...]], *, label: str =None, user_data: Any =None, use_internal_label: bool =True, tag: Union[int, str] =0, parent: Union[int, str] =0, before: Union[int, str] =0, source: Union[int, str] =0, show: bool =True, tooltip: bool =True, **kwargs) -> Union[int, str]:
+	"""	 Adds a candle series to a plot.
+
+	Args:
+		dates (Any):
+		lows (Any):
+		highs (Any):
+		label (str, optional): Overrides 'name' as label.
+		user_data (Any, optional): User data for callbacks
+		use_internal_label (bool, optional): Use generated internal label instead of user specified (appends ### uuid).
+		tag (Union[int, str], optional): Unique id used to programmatically refer to the item.If label is unused this will be the label.
+		parent (Union[int, str], optional): Parent to add this item to. (runtime adding)
+		before (Union[int, str], optional): This item will be displayed before the specified item in the parent.
+		source (Union[int, str], optional): Overrides 'id' as value storage key.
+		show (bool, optional): Attempt to render widget.
+		tooltip (bool, optional):
+		id (Union[int, str], optional): (deprecated)
+	Returns:
+		Union[int, str]
+	"""
+
+	if 'id' in kwargs.keys():
+		warnings.warn('id keyword renamed to tag', DeprecationWarning, 2)
+		tag=kwargs['id']
+
+	return internal_dpg.add_time_series(dates, lows, highs, label=label, user_data=user_data, use_internal_label=use_internal_label, tag=tag, parent=parent, before=before, source=source, show=show, tooltip=tooltip, **kwargs)
+
+def set_axis_range(axis : Union[int, str], min : float, max : float, **kwargs) -> None:
+    """     Sets limits on the axis for pan and zoom.
+
+    Args:
+       axis (Union[int, str]):
+       min (float):
+       max (float):
+    Returns:
+       None
+    """
+    return internal_dpg.set_axis_range(axis, min, max, **kwargs)
+
+def get_axis_range(axis : Union[int, str], **kwargs) -> Union[List[float], Tuple[float, ...]]:
+    """     Get the specified axis range.
+
+    Args:
+       axis (Union[int, str]):
+    Returns:
+       Union[List[float], Tuple[float, ...]]
+    """
+
+    return internal_dpg.get_axis_range(axis, **kwargs)

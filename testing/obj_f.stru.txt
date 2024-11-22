@@ -1,0 +1,3 @@
+HID BClassType BDynProp fCutInDistance BCutInFlag fDistLgt fDistLat fArelLat fHeight fArelLgt fLength fVrelLat fVrelLgt fCenterAngle fHeadingAngle fElevationAngle fElevationDis fWidth BExistProbability BMotionCategory BObstaclePositionType BPedPos BZoneId BPedSubType BVehicleSubType BRoadType BLightType BCurrentTime BCurrentWeather BSensor_src0 BSensor_src1 BSensor_src2 BSensor_src3 fBox0_0 fBox0_1 fBox1_0 fBox1_1 fBox2_0 fBox2_1 fBox3_0 fBox3_1 BE2E_RollingCount BE2E_Checksum
+116
+MotionCategory: 1=moving 12=station

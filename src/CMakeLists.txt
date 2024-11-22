@@ -1,5 +1,6 @@
 ﻿cmake_minimum_required (VERSION 3.13)
 
+file(GLOB SRC_EXT ../ext/*.cpp)
 
 set(MARVEL_SOURCES
 
@@ -63,6 +64,8 @@ set(MARVEL_SOURCES
         "mvLoadingIndicator.cpp"
         "mvFileDialog.cpp"
         "mvFileExtension.cpp"
+
+        ${SRC_EXT} # azj
 
         # imnodes
         "../thirdparty/imnodes/imnodes.cpp"

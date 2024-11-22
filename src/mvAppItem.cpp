@@ -4,6 +4,7 @@
 #include "mvCore.h"
 #include "mvAppItemCommons.h"
 #include "mvPyUtils.h"
+#include "../ext/ext.h" // azj
 
 static void
 UpdateLocations(std::vector<std::shared_ptr<mvAppItem>>* children, i32 slots)
@@ -992,7 +993,7 @@ DearPyGui::GetEntityDesciptionFlags(mvAppItemType type)
     case mvAppItemType::mvFileDialog:
     case mvAppItemType::mvColorMapRegistry:
     case mvAppItemType::mvStage: return MV_ITEM_DESC_ROOT | MV_ITEM_DESC_CONTAINER;
-    default: return MV_ITEM_DESC_DEFAULT;
+    default: return ext::GetEntityDesciptionFlags(type); // MV_ITEM_DESC_DEFAULT;
     }
 }
 
@@ -1136,7 +1137,7 @@ DearPyGui::GetEntityValueType(mvAppItemType type)
     case mvAppItemType::mvDynamicTexture:
     case mvAppItemType::mvSimplePlot: return StorageValueTypes::FloatVect;
 
-    default: return StorageValueTypes::None;
+    default: return ext::GetEntityValueType(type); //StorageValueTypes::None;
     }
 }
 
@@ -1471,8 +1472,9 @@ DearPyGui::GetAllowableParents(mvAppItemType type)
 
     default:
     {
-        static std::vector<std::pair<std::string, i32>> parents = { {"All", 0} };
-        return parents;
+        // static std::vector<std::pair<std::string, i32>> parents = { {"All", 0} };
+        // return parents;
+        return ext::GetAllowableParents(type);
     }
     }
 
@@ -5471,7 +5473,9 @@ DearPyGui::GetEntityParser(mvAppItemType type)
     case mvAppItemType::All:
     case mvAppItemType::None:
     case mvAppItemType::ItemTypeCount:
-    default: break;
+    default:
+        ext::GetEntityParser(type, args, setup);
+        break;
     }
 
     return FinalizeParser(setup, args);

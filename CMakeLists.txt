@@ -38,7 +38,7 @@ endif()
 
 # when set to "ON", the embedded version
 # will be the only version build (no sandbox builds)
-set(MVDIST_ONLY ${MVDIST_ONLY})
+set(MVDIST_ONLY 1)
 if(MVDIST_ONLY)
     add_definitions(-DMVDIST_ONLY)
 else()

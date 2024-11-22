@@ -82,6 +82,141 @@ SOFTWARE.
 #include <algorithm>
 #include <iostream>
 
+
+
+
+using str = std::string;
+
+#ifdef WIN32
+static std::string utf8_encode(const std::wstring &wstr)
+{
+    if (wstr.empty())
+        return std::string();
+    int size_needed = WideCharToMultiByte(CP_UTF8, 0, &wstr[0], (int)wstr.size(), NULL, 0, NULL, NULL);
+    std::string strTo(size_needed, 0);
+    WideCharToMultiByte(CP_UTF8, 0, &wstr[0], (int)wstr.size(), &strTo[0], size_needed, NULL, NULL);
+    return strTo;
+}
+
+// Convert an UTF8 string to a wide Unicode String
+static std::wstring utf8_decode(const std::string &str)
+{
+    if (str.empty())
+        return std::wstring();
+    int size_needed = MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), NULL, 0);
+    std::wstring wstrTo(size_needed + 1, 0);
+    MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), &wstrTo[0], size_needed);
+    wstrTo[size_needed] = L'\0';
+    return wstrTo;
+}
+
+#include <sddl.h>
+
+static int _mkdirs(const str &dir)
+{
+    SECURITY_ATTRIBUTES secAttr = {sizeof(secAttr)};
+    SECURITY_ATTRIBUTES *pSecAttr = NULL;
+
+    ULONG sdSize;
+
+    auto p = dir.rfind('/');
+    if (p == str::npos)
+        p = dir.rfind('\\');
+    if (p != str::npos)
+    {
+        auto pdir = dir.substr(0, p);
+        auto wpath = utf8_decode(pdir);
+        auto fattr = GetFileAttributesW(wpath.c_str());
+        if (fattr == INVALID_FILE_ATTRIBUTES)
+        {
+            _mkdirs(pdir);
+        }
+    }
+
+    if (!ConvertStringSecurityDescriptorToSecurityDescriptorW(
+            L"D:P(A;OICI;FA;;;SY)(A;OICI;FA;;;BA)(A;OICI;FA;;;OW)",
+            SDDL_REVISION_1,
+            &secAttr.lpSecurityDescriptor,
+            &sdSize))
+    {
+    }
+    else
+    {
+        pSecAttr = &secAttr;
+    }
+
+    auto wpath = utf8_decode(dir);
+    auto result = CreateDirectoryW(wpath.c_str(), pSecAttr);
+    return result == TRUE ? 0 : -2;
+}
+
+static int _listdir(str &datadir, std::vector<str> &outlst, std::vector<char> &outattr)
+{
+    auto wpath = utf8_decode(datadir + "\\*.*");
+    int ret = 0;
+
+    outlst.clear();
+
+    HANDLE hFindFile;
+    WIN32_FIND_DATAW wFileData;
+    BOOL result;
+
+    hFindFile = FindFirstFileW(wpath.c_str(), &wFileData);
+    if (hFindFile == INVALID_HANDLE_VALUE)
+    {
+        int error = GetLastError();
+        if (error == ERROR_FILE_NOT_FOUND)
+            return -3;
+    }
+
+    do
+    {
+        /* Skip over . and .. */
+        if (wcscmp(wFileData.cFileName, L".") != 0 &&
+            wcscmp(wFileData.cFileName, L"..") != 0)
+        {
+
+            std::wstring v(wFileData.cFileName, wcslen(wFileData.cFileName));
+            outlst.push_back(utf8_encode(v));
+			if(wFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+				outattr.push_back('d');
+			else
+				outattr.push_back('f');
+        }
+
+        result = FindNextFileW(hFindFile, &wFileData);
+        if (!result && GetLastError() != ERROR_NO_MORE_FILES)
+        {
+            ret = -2;
+            break;
+        }
+    } while (result == TRUE);
+
+    FindClose(hFindFile);
+    return ret == 0 ? outlst.size() : ret;
+}
+
+#define BUFSIZE 4096
+str _abspath(const str &path) {
+	auto wpath = utf8_decode(path);
+
+	WCHAR  buffer[BUFSIZE]={0LL};
+	WCHAR** lppPart={NULL};
+
+	auto retval = GetFullPathNameW(wpath.c_str(),
+                 BUFSIZE,
+                 buffer,
+                 lppPart);
+	if (retval == 0)
+		return "";
+	
+	return utf8_encode(std::wstring(buffer, wcslen(buffer)));
+}
+
+#endif // WIN32
+
+
+
 #ifdef USE_THUMBNAILS
 #ifndef DONT_DEFINE_AGAIN__STB_IMAGE_IMPLEMENTATION
 #ifndef STB_IMAGE_IMPLEMENTATION
@@ -509,18 +644,7 @@ namespace IGFD
 			if (!IsDirectoryExist(name))
 			{
 #ifdef WIN32
-#ifdef USE_STD_FILESYSTEM
-				namespace fs = std::filesystem;
-				std::wstring wname = IGFD::Utils::string_to_wstring(name.c_str());
-				fs::path pathName = fs::path(wname);
-				res = fs::create_directory(pathName);
-#else
-				std::wstring wname = IGFD::Utils::string_to_wstring(name);
-				if (CreateDirectoryW(wname.c_str(), nullptr))
-				{
-					res = true;
-				}
-#endif // USE_STD_FILESYSTEM
+				_mkdirs(name);
 #elif defined(__EMSCRIPTEN__)
 				std::string str = std::string("FS.mkdir('") + name + "');";
 				emscripten_run_script(str.c_str());
@@ -1262,12 +1386,20 @@ namespace IGFD
 
 		if (!prCurrentPathDecomposition.empty())
 		{
+			ClearFileLists();
 #ifdef WIN32
 			if (path == puFsRoot)
 				path += std::string(1u, PATH_SEP);
-#endif // WIN32
+			std::vector<str> names;
+			std::vector<char> attrs;
+			auto r =_listdir(path, names, attrs);
+			if(r > 0){
+				for(int i=0; i<r; i++){
+					AddFile(vFileDialogInternal, path, names[i], attrs[i]);
+				}
+			}
+#else
 
-			ClearFileLists();
 
 #ifdef USE_STD_FILESYSTEM
 			//const auto wpath = IGFD::Utils::WGetString(path.c_str());
@@ -1319,6 +1451,7 @@ namespace IGFD
 				free(files);
 			}
 #endif // USE_STD_FILESYSTEM
+#endif // WIN32
 
 			SortFields(vFileDialogInternal, puSortingField, false);
 		}
@@ -1559,12 +1692,11 @@ namespace IGFD
 #endif // WIN32
 		
 #ifdef USE_STD_FILESYSTEM
-		namespace fs = std::filesystem;
-		bool dir_opened = fs::is_directory(vPath);
+		bool dir_opened = IGFD::Utils::IsDirectoryExist(path);
 		if (!dir_opened)
 		{
 			path = ".";
-			dir_opened = fs::is_directory(vPath);
+			dir_opened = IGFD::Utils::IsDirectoryExist(path);
 		}
 		if (dir_opened)
 #else
@@ -1579,15 +1711,7 @@ namespace IGFD
 #endif // USE_STD_FILESYSTEM
 		{
 #ifdef WIN32
-			DWORD numchar = 0;
-			//			numchar = GetFullPathNameA(path.c_str(), PATH_MAX, real_path, nullptr);
-			std::wstring wpath = IGFD::Utils::string_to_wstring(path);
-			numchar = GetFullPathNameW(wpath.c_str(), 0, nullptr, nullptr);
-			std::wstring fpath(numchar, 0);
-			GetFullPathNameW(wpath.c_str(), numchar, (wchar_t*)fpath.data(), nullptr);
-			std::string real_path = IGFD::Utils::wstring_to_string(fpath);
-			if (real_path.back() == '\0') // for fix issue we can have with std::string concatenation.. if there is a \0 at end
-				real_path = real_path.substr(0, real_path.size() - 1U);
+			auto real_path = _abspath(path);
 			if (!real_path.empty())
 #elif defined(UNIX) // UNIX is LINUX or APPLE
 			char real_path[PATH_MAX]; 

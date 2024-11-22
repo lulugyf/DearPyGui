@@ -1968,3 +1968,36 @@ InsertParser_Block4(std::map<std::string, mvPythonParser>& parsers)
 		parsers.insert({ "get_platform", parser });
 	}
 }
+
+
+static void InsertParser_Block_custom(std::map<std::string, mvPythonParser>& parsers) // azj
+{
+	///// axis
+	{
+		std::vector<mvPythonDataElement> args;
+		args.reserve(3);
+		args.push_back({ mvPyDataType::UUID, "axis" });
+		args.push_back({ mvPyDataType::Float, "ymin" });
+		args.push_back({ mvPyDataType::Float, "ymax" });
+
+		mvPythonParserSetup setup;
+		setup.about = "Sets range on the axis.";
+		setup.category = { "Plotting", "App Item Operations" };
+
+		mvPythonParser parser = FinalizeParser(setup, args);
+		parsers.insert({ "set_axis_range", parser });
+	}
+
+	{
+		std::vector<mvPythonDataElement> args;
+		args.push_back({ mvPyDataType::UUID, "axis" });
+
+		mvPythonParserSetup setup;
+		setup.about = "Get the specified axis axis.";
+		setup.category = { "Plotting", "App Item Operations" };
+		setup.returnType = mvPyDataType::FloatList;
+
+		mvPythonParser parser = FinalizeParser(setup, args);
+		parsers.insert({ "get_axis_range", parser });
+	}
+}

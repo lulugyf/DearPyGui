@@ -452,8 +452,11 @@ DearPyGui::draw_plot(ImDrawList* drawlist, mvAppItem& item, mvPlotConfig& config
 				}
 
 				ImPlot::SetupAxis(id_axis, axis->config.specifiedLabel.c_str(), flags);
-				if (axis->configData.setLimits)
+				if (axis->configData.setLimits || axis->configData._dirty || axis->configData.setRange){ // azj
 					ImPlot::SetupAxisLimits(id_axis, axis->configData.limits.x, axis->configData.limits.y, ImGuiCond_Always);
+					axis->configData._dirty = false;
+					axis->configData.setRange = false; // azj
+				}
 
 				if (!axis->configData.formatter.empty())
 					ImPlot::SetupAxisFormat(id_axis, axis->configData.formatter.c_str());

@@ -390,6 +390,8 @@ struct mvPlotAxisConfig
     ImPlotAxisFlags          flags = ImPlotAxisFlags_None;
     ImAxis                   axis = ImAxis_X1;
     bool                     setLimits = false;
+    bool                     setRange = false; // azj
+    bool                     _dirty = false;
     bool                     setLimitsRange = false;
     bool                     setZoomRange = false;
     ImPlotScale              scale = ImPlotScale_Linear;
