@@ -29,7 +29,6 @@ target_link_directories(_dearpygui
 	)
 
 target_compile_definitions(_dearpygui
-
 	PRIVATE
 		$<$<CONFIG:Release>:MV_RELEASE>
 )
@@ -37,10 +36,13 @@ target_compile_definitions(_dearpygui
 add_definitions(-DIMGUI_DEFINE_MATH_OPERATORS)
 
 if(WIN32)
-
 	set_target_properties(_dearpygui PROPERTIES SUFFIX ".pyd")
 	set_target_properties(_dearpygui PROPERTIES PREFIX "")
 	target_link_libraries(_dearpygui PUBLIC d3d11 dxgi dwmapi ${Python_LIBRARIES} freetype)
+
+	add_custom_command(TARGET _dearpygui POST_BUILD
+   		COMMAND python.exe ${CMAKE_SOURCE_DIR}/testing/postbuild.py "${CMAKE_SOURCE_DIR}" "$<TARGET_FILE:_dearpygui>"
+	)
 
 elseif(APPLE)
 
